@@ -125,3 +125,62 @@ mo_gpby[mo_gpby['Year']>=2012]
 mo_gpby = merged_data.groupby('Year')[['Rotten Tomatoes']].agg(['max','min']).reset_index()
 mo_gpby[mo_gpby['Year']>=2012]
 
+
+# ## Scenario
+# 
+# The political party is considering running advertisements with some provoking messages,
+# but they need to ensure the content is suitable for the audiences watching the films. 
+# The data Mandisa is working with includes content ratings (in the Age column) 
+# that Mandisa can use to organise the DataFrame.
+# 
+# ## Objective
+# 
+# Your objective at this stage is to organise the data by:
+# 
+#     -the film release date and content rating
+#     -the title of movies, the directors, and genres by content rating
+#     -the title of movies, the released year, and the language by content rating
+#     -Netflix screened movies based on language, runtime, and country
+#     -the title of movies, specified language, potential runtime, and genres by content rating.
+# 
+# You’ll need to use the pivot() function to create pivot tables for each description. 
+# More specifically, you’ll:
+# 
+#     -create a DataFrame for each description
+#     -employ the pivot() function on the merged and original DataFrames
+#     -specify the necessary parameters for the pivot() function.
+
+# In[26]:
+
+
+# the film release date and content rating.
+merged_data.pivot(index='Title', columns='Age', values='Year')
+
+
+# In[29]:
+
+
+# the title of movies, the directors, and genres by content rating.
+merged_data.pivot(index='Title', columns='Age', values=['Directors', 'Genres'])
+
+
+# In[31]:
+
+
+# the title of movies, the released year, and the language by content rating
+merged_data.pivot(index='Title', columns='Age', values=['Year', 'Language'])
+
+
+# In[32]:
+
+
+# Netflix screened movies based on language, runtime, and country.
+merged_data.pivot(index='Title', columns='Netflix', values=['Language', 'Runtime', 'Country'])
+
+
+# In[34]:
+
+
+# the title of movies, specified language, potential runtime, and genres by content rating.
+merged_data.pivot(index='Title', columns='Age', values=['Language', 'Runtime', 'Genres'])
+
