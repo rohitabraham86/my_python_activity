@@ -22,7 +22,7 @@
 #     3. Describe the DataFrames to understand the structures and data types. 
 #     4. Merge the two DataFrames into a single DataFrame.
 
-# In[3]:
+# In[1]:
 
 
 # Import the library.
@@ -30,7 +30,7 @@ import pandas as pd
 import numpy as np
 
 
-# In[4]:
+# In[2]:
 
 
 # Import the datasets.
@@ -38,7 +38,7 @@ movies_merge = pd.read_excel('movies_merge.xlsx')
 ott_merge = pd.read_csv('ott_merge.csv')
 
 
-# In[5]:
+# In[3]:
 
 
 # View the 'movies_merge' DataFrame.
@@ -46,7 +46,7 @@ print("Shape of the movies_merge df is, ",movies_merge.shape)
 movies_merge.head()
 
 
-# In[6]:
+# In[4]:
 
 
 # View the 'ott_merge' DataFrame.
@@ -54,7 +54,7 @@ print("Shape of the ott_merge df is, ",ott_merge.shape)
 ott_merge.head()
 
 
-# In[7]:
+# In[5]:
 
 
 # Describe the DataFrame
@@ -62,7 +62,7 @@ print("The data types for movies_merge are:\n",movies_merge.dtypes)
 print("\nThe data types for ott_merge are:\n",ott_merge.dtypes)
 
 
-# In[8]:
+# In[6]:
 
 
 # Merge the DataFrame.
@@ -75,7 +75,7 @@ print("\nThe data types for merged_data are:\n",merged_data.dtypes)
 merged_data.head()
 
 
-# In[9]:
+# In[7]:
 
 
 # Concatenate the DataFrame.
@@ -102,7 +102,7 @@ concat_data.head()
 
 # ### 1. Determine how many films from each year (released from 2012 to the present) were watched on Netflix. 
 
-# In[10]:
+# In[8]:
 
 
 mo_gpby = merged_data.groupby('Year')[['Netflix']].agg('sum').reset_index()
@@ -111,7 +111,7 @@ mo_gpby[mo_gpby['Year']>=2012]
 
 # ### 2. Determine what the average runtime is of movies released each year since 2012.
 
-# In[11]:
+# In[9]:
 
 
 mo_gpby = merged_data.groupby('Year')[['Runtime']].agg(['sum','mean']).reset_index()
@@ -120,7 +120,7 @@ mo_gpby[mo_gpby['Year']>=2012]
 
 # ### 3. Determine what the best and worst reviews are that movies received on Rotten Tomatoes since 2012.
 
-# In[12]:
+# In[10]:
 
 
 mo_gpby = merged_data.groupby('Year')[['Rotten Tomatoes']].agg(['max','min']).reset_index()
@@ -151,35 +151,35 @@ mo_gpby[mo_gpby['Year']>=2012]
 #     -employ the pivot() function on the merged and original DataFrames
 #     -specify the necessary parameters for the pivot() function.
 
-# In[13]:
+# In[11]:
 
 
 # the film release date and content rating.
 merged_data.pivot(index='Title', columns='Age', values='Year')
 
 
-# In[14]:
+# In[12]:
 
 
 # the title of movies, the directors, and genres by content rating.
 merged_data.pivot(index='Title', columns='Age', values=['Directors', 'Genres'])
 
 
-# In[15]:
+# In[13]:
 
 
 # the title of movies, the released year, and the language by content rating
 merged_data.pivot(index='Title', columns='Age', values=['Year', 'Language'])
 
 
-# In[16]:
+# In[14]:
 
 
 # Netflix screened movies based on language, runtime, and country.
 merged_data.pivot(index='Title', columns='Netflix', values=['Language', 'Runtime', 'Country'])
 
 
-# In[17]:
+# In[15]:
 
 
 # the title of movies, specified language, potential runtime, and genres by content rating.
@@ -207,7 +207,7 @@ merged_data.pivot(index='Title', columns='Age', values=['Language', 'Runtime', '
 
 # #### Q1. What is the effect of adding 60 seconds (one minute) to each movie?
 
-# In[19]:
+# In[16]:
 
 
 # Create a subset
@@ -217,7 +217,7 @@ merged_data_new = merged_data[['ID', 'Title', 'Genres', 'Runtime']]
 merged_data_new.head()
 
 
-# In[21]:
+# In[17]:
 
 
 # Add 60 seconds / 1 minute to the runtime
@@ -226,7 +226,7 @@ merged_data_new.Runtime.add(1)
 
 # #### Q2. Which movies are documentaries?
 
-# In[22]:
+# In[18]:
 
 
 # Create a column to specify if Documentary or Not Documenatary.
@@ -237,7 +237,7 @@ merged_data_new['Gen_doc'] = np.where(merged_data_new['Genres'].str.contains
 merged_data_new
 
 
-# In[28]:
+# In[19]:
 
 
 # Determine the number of characters.
@@ -256,7 +256,7 @@ merged_data_new
 # Runtime of all the movies, resulting in saving if they 
 # limit the number of adverts during a movie. 
 
-# In[29]:
+# In[20]:
 
 
 # Create a Subset
@@ -266,9 +266,96 @@ merged_data_run_less = merged_data[['ID', 'Title', 'Genres', 'Runtime']]
 merged_data_run_less.head()
 
 
-# In[31]:
+# In[21]:
 
 
 # Sub 6 seconds(0.01minutes) from the runtime
 merged_data_run_less.Runtime.subtract(0.01)
+
+
+# #### 3.2.6 Practical activity: Write and apply user-defined functions
+
+# ### Scenario
+# This is a continuation of the analysis you’re doing alongside Mandisa Nkosi to 
+# inform decision-making in politics, first introduced in 3.1.5 Practical activity:
+# Create and merge the DataFrames. 
+# 
+# The political party has two questions on its mind when it comes to running its ads:
+# 
+#     -Should the ads be more generic and appeal to as wide an audience as possible?
+#     -Should the ads be more provocative and be aired during films with the appropriate age rating?
+# They ask Mandisa for her input.
+# 
+# ### Objective
+# Mandisa comes up with a few questions she feels might help the political party to 
+# make a decision and that she can answer through analysis:
+# 
+#     -What is the average rating per movie?
+#     -How many movies were released per content rating (age)?
+#     -How many movies were released per year?
+# 
+# Your objectives at this stage are to answer the three questions to inform the decision
+# about the advertisement that will be broadcast and during which films.
+# 
+# 
+
+# #### Q1.What is the average rating per movie?
+
+# In[29]:
+
+
+# Create DataFrame and fill NaN with 0.
+mov_ott_ratings = merged_data[['ID', 'IMDb', 'Rotten Tomatoes']]
+mov_ott_ratings_final = mov_ott_ratings.fillna(0)
+
+# View the dataframe
+mov_ott_ratings_final
+
+
+# In[32]:
+
+
+# Create a user-defined function to calculate average rating received.
+def avg_col2(df1,df2):
+    df = (df1/10 + df2)/2
+    return df
+
+mov_ott_ratings_final["ratings"] = avg_col2(mov_ott_ratings_final['IMDb'],
+                                            mov_ott_ratings_final['Rotten Tomatoes'])
+
+#View Dataframe
+mov_ott_ratings_final
+
+
+# #### Q2. How many movies were released per content rating (age)?
+
+# In[35]:
+
+
+# Create a user-defined function to calculate sum of all the movies released per Age group.
+# categorical count.
+def cat_cnt(df1):
+    print(df1.value_counts())
+
+# Number of movies released per 'Age'.
+df = merged_data['Age'].astype('category')
+
+# View
+cat_cnt(df)
+
+
+# #### Q3. How many movies were released per year?
+
+# In[37]:
+
+
+# Create user-defined function to calculate the sum of all the movies released per Year group.
+def mov_sum(df1):
+    print(df1.value_counts())
+
+# Sum of movies per year
+sf = merged_data['Year'].astype('category')
+
+# View
+mov_sum(sf)
 
